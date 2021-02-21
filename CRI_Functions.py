@@ -77,6 +77,7 @@ def relative_Cor_TarS(VTx, VTy, Xot, Yot):
             return (res)
 
     re_theta = comp_fun(Vr_radio_pass)
+
     theta_OT_Deg = ((180 / (math.pi)) * re_theta)
 
     xyu = Xot
@@ -139,6 +140,10 @@ def Relat_Motion_para(Xo, Yo, Xt, Yt, theta_o, theta_ot, theta_real, Vott):
     TCPA_rnd = round(TCPA_1, 3)
     print('alpha t : ', theta_Real_Deg)
     print('Theat 0 : ', DO)
+    if (theta_Real_Deg > 360):
+        theta_Real_Deg = theta_Real_Deg -360
+    else:
+        pass
     alpha_OT = round((theta_Real_Deg - DO + 360), 3)
     result_3 = (DCPA_rnd, TCPA_rnd, alpha_OT, D_Btwn)
     return result_3

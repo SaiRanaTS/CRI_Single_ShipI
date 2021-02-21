@@ -135,3 +135,7 @@ def CRI_call(Own_Ship_v, Trg_Ship_v, Own_Ship_Xpos, Own_Ship_Ypos, Trg_Ship_Xpos
 
     return CRI_Index
 
+
+
+
+
