@@ -44,7 +44,7 @@ def CRI_call(Own_Ship_v, Trg_Ship_v, Own_Ship_Xpos, Own_Ship_Ypos, Trg_Ship_Xpos
     ###################################################################################################
     # function test 3 - The Relative course and True course
 
-    RC_TC = CRI_Functions.relative_Cor_TarS(Vx, Vy, Xot, Xot)
+    RC_TC = CRI_Functions.relative_Cor_TarS(Vx, Vy, Xot, Yot)
     Rc = RC_TC[0]
     Tc = RC_TC[1]
     print('---------------------------------------------')

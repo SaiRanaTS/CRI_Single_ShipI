@@ -10,11 +10,11 @@ import numpy as np
 # Intermidiate Parameters Function
 
 def Inter_Para(O_v, T_v, O_x, O_y, T_x, T_y, O_ang, T_ang):
-    vox = round(O_v * math.sin(math.radians(O_ang)), 3)
-    voy = round(O_v * math.cos(math.radians(O_ang)), 3)
+    vox = round(O_v * math.cos(math.radians(O_ang)), 3)
+    voy = round(O_v * math.sin(math.radians(O_ang)), 3)
 
-    vtx = round(T_v * math.sin(math.radians(T_ang)), 3)
-    vty = round(T_v * math.cos(math.radians(T_ang)), 3)
+    vtx = round(T_v * math.cos(math.radians(T_ang)), 3)
+    vty = round(T_v * math.sin(math.radians(T_ang)), 3)
 
     vx = vtx - vox
     vxr = round(vx, 3)
@@ -32,16 +32,12 @@ def Inter_Para(O_v, T_v, O_x, O_y, T_x, T_y, O_ang, T_ang):
 
 # function Relative Speed
 def relative_Velo(V_O, V_T, theta_O, theta_T):
-    vo_re = V_O
-    vt_re = V_T
-    angO_re = theta_O
-    angT_re = theta_T
     velo_ratio_re = (V_T / V_O)
     diff_angle_re = theta_O - theta_T
     cos_diff_re = math.cos(math.radians(diff_angle_re))
     velo_Ratio_sqr_re = velo_ratio_re ** 2
     inside_f_re = (1 + velo_Ratio_sqr_re - 2 * velo_ratio_re * cos_diff_re)
-    Vot_re = round(vo_re * math.sqrt(inside_f_re), 3)
+    Vot_re = round(V_O* math.sqrt(inside_f_re), 3)
     return Vot_re
 
 
@@ -79,6 +75,13 @@ def relative_Cor_TarS(VTx, VTy, Xot, Yot):
     re_theta = comp_fun(Vr_radio_pass)
 
     theta_OT_Deg = ((180 / (math.pi)) * re_theta)
+    if theta_OT_Deg < 0:
+        theta_OT_Deg = 360 + theta_OT_Deg
+    elif theta_OT_Deg >= 360:
+        theta_OT_Deg = theta_OT_Deg - 360
+    else:
+        theta_OT_Deg = theta_OT_Deg
+
 
     xyu = Xot
     yyu = Yot
@@ -86,8 +89,11 @@ def relative_Cor_TarS(VTx, VTy, Xot, Yot):
         yyu = 0.000001
     else:
         yyu = Yot
+    print('xyu = ', xyu)
+    print('yyu = ',yyu)
     xot_yot_ratio = xyu / yyu
     xotratio_deg = xot_yot_ratio
+    print('Real x y  ratio : ',xotratio_deg )
 
     def true_fun(vr5):
         if xyu >= 0 and yyu >= 0:
@@ -109,6 +115,16 @@ def relative_Cor_TarS(VTx, VTy, Xot, Yot):
 
     real_theta = true_fun(xotratio_deg)
     theta_Real_Deg = float(((180 / (math.pi)) * real_theta))
+
+    if  theta_Real_Deg < 0:
+        theta_Real_Deg = 360 + theta_Real_Deg
+    elif theta_Real_Deg >= 360:
+        theta_Real_Deg = theta_Real_Deg - 360
+    else:
+        theta_Real_Deg = theta_Real_Deg
+
+
+
     result_2 = (theta_OT_Deg, theta_Real_Deg)
     return result_2
 
@@ -132,10 +148,10 @@ def Relat_Motion_para(Xo, Yo, Xt, Yt, theta_o, theta_ot, theta_real, Vott):
     D_Btwn = math.sqrt(((xd2 - xd1) ** 2) + ((yd2 - yd1) ** 2))
 
     # DCPA and TCPA Calculations
-    ang_D = math.sin(math.radians(theta_OT_Deg - theta_Real_Deg - 180))
+    ang_D = math.sin(math.radians(theta_OT_Deg - theta_Real_Deg ))
     DCPA_1 = D_Btwn * ang_D
     DCPA_rnd = round(DCPA_1, 3)
-    top_fun = math.cos(math.radians(theta_OT_Deg - theta_Real_Deg - 180))
+    top_fun = math.cos(math.radians(theta_OT_Deg - theta_Real_Deg ))
     TCPA_1 = ((D_Btwn * top_fun) / Vot_re)
     TCPA_rnd = round(TCPA_1, 3)
     print('alpha t : ', theta_Real_Deg)
@@ -154,7 +170,7 @@ def Relat_Motion_para(Xo, Yo, Xt, Yt, theta_o, theta_ot, theta_real, Vott):
 # Calculation of d1 and d2
 def d1_and_d2(alphaot, k):
     if alphaot > 360:
-        aph_ot_d1 = aph_ot_d1 - 360
+        aph_ot_d1 = alphaot - 360
     else:
         aph_ot_d1 = alphaot
     print('aph_ot_d1 : ', aph_ot_d1)
