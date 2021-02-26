@@ -10,11 +10,11 @@ import numpy as np
 # Intermidiate Parameters Function
 
 def Inter_Para(O_v, T_v, O_x, O_y, T_x, T_y, O_ang, T_ang):
-    vox = round(O_v * math.cos(math.radians(O_ang)), 3)
-    voy = round(O_v * math.sin(math.radians(O_ang)), 3)
+    vox = round(O_v * math.sin(math.radians(O_ang)), 3)
+    voy = round(O_v * math.cos(math.radians(O_ang)), 3)
 
-    vtx = round(T_v * math.cos(math.radians(T_ang)), 3)
-    vty = round(T_v * math.sin(math.radians(T_ang)), 3)
+    vtx = round(T_v * math.sin(math.radians(T_ang)), 3)
+    vty = round(T_v * math.cos(math.radians(T_ang)), 3)
 
     vx = vtx - vox
     vxr = round(vx, 3)
@@ -123,7 +123,8 @@ def relative_Cor_TarS(VTx, VTy, Xot, Yot):
     else:
         theta_Real_Deg = theta_Real_Deg
 
-
+    print('Alpha OT F : ',theta_Real_Deg)
+    print('Theta OT F : ', theta_OT_Deg)
 
     result_2 = (theta_OT_Deg, theta_Real_Deg)
     return result_2
@@ -146,21 +147,28 @@ def Relat_Motion_para(Xo, Yo, Xt, Yt, theta_o, theta_ot, theta_real, Vott):
     theta_OT_Deg = theta_ot
     theta_Real_Deg = theta_real
     D_Btwn = math.sqrt(((xd2 - xd1) ** 2) + ((yd2 - yd1) ** 2))
+    print('xo : ',xd1)
+    print('xt : ',xd2)
+    print('yo : ',yd1)
+    print('yt : ',yd2)
+    print('D_Between : ', D_Btwn)
 
     # DCPA and TCPA Calculations
-    ang_D = math.sin(math.radians(theta_OT_Deg - theta_Real_Deg ))
+    ang_D = math.sin(math.radians(theta_OT_Deg - theta_Real_Deg -180 ))
     DCPA_1 = D_Btwn * ang_D
     DCPA_rnd = round(DCPA_1, 3)
-    top_fun = math.cos(math.radians(theta_OT_Deg - theta_Real_Deg ))
+    top_fun = math.cos(math.radians(theta_OT_Deg - theta_Real_Deg - 180 ))
     TCPA_1 = ((D_Btwn * top_fun) / Vot_re)
     TCPA_rnd = round(TCPA_1, 3)
     print('alpha t : ', theta_Real_Deg)
     print('Theat 0 : ', DO)
-    if (theta_Real_Deg > 360):
-        theta_Real_Deg = theta_Real_Deg -360
+    alpha_OT = theta_real - theta_o
+    if alpha_OT < 0 :
+        alpha_OT = alpha_OT + 360
+    elif alpha_OT > 360 :
+        alpha_OT = alpha_OT - 360
     else:
         pass
-    alpha_OT = round((theta_Real_Deg - DO + 360), 3)
     result_3 = (DCPA_rnd, TCPA_rnd, alpha_OT, D_Btwn)
     return result_3
 
@@ -227,16 +235,16 @@ def D1_D2_t1_t2(DC, GwSl, Votx, alphaOTx):
     dz1 = d1_value
     dz2 = d2t_l
     if dz1 >= dtz1:
-        fun_inside_rootz = abs((dz1) ** 2 - (dtz1) ** 2)
+        fun_inside_rootz = ((dz1) ** 2 - (dtz1) ** 2)
         t1zz = round(((math.sqrt(fun_inside_rootz)) / vzot), 3)
     else:
-        fun_ontop = abs(((dz1 - dtz1)))
+        fun_ontop = (((dz1 - dtz1)))
         t1zz = round(((fun_ontop) / vzot), 3)
     if dz2 >= dtz1:
-        fun_inside_rootz = abs(((dz2) ** 2 - (dtz2) ** 2))
+        fun_inside_rootz = (((dz2) ** 2 - (dtz2) ** 2))
         t2zz = round(((math.sqrt(fun_inside_rootz)) / vzot), 3)
     else:
-        fun_ontop = abs(((dz2 - dtz2)))
+        fun_ontop = (((dz2 - dtz2)))
         t2zz = round(((fun_ontop) / vzot), 3)
     result_5 = (d1_value, d2t_l, t1zz, t2zz)
     return result_5
